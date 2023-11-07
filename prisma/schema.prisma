@@ -28,7 +28,7 @@ model Recipient {
   name          String
   email         String  @unique
   password      String
-  slug          String?
+  slug          String  @unique
   city          String
   neightborhood String
   houseNumber   Int
