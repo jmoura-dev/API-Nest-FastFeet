@@ -12,7 +12,7 @@ import { PrismaService } from 'src/prisma/prisma.service'
 export class IsAdminMiddleware implements NestMiddleware {
   constructor(private prisma: PrismaService) {}
 
-  async use(@CurrentUser() user: UserPayload, _: any, next: () => void) {
+  async use(@CurrentUser() user: UserPayload, _: unknown, next: () => void) {
     const loggedUser = await this.prisma.user.findUnique({
       where: {
         id: user.sub,

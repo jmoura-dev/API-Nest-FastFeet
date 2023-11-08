@@ -16,6 +16,7 @@ Content-Type: application/json
 # @name authenticate_user
 POST {{baseUrl}}/users/sessions
 Content-Type: application/json
+Authorization: Bearer {{authToken}}
 
 {
   "cpf": "28725945075",
