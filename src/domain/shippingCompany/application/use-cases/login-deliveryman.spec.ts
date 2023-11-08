@@ -1,6 +1,7 @@
 import { InMemoryDeliverymansRepository } from 'test/repositories/in-memory-deliverymans-repository'
 import { LoginDeliverymanUseCase } from './login-deliveryman'
 import { makeDeliveryman } from 'test/factories/make-deliveryman'
+import { CredentialsDoNotMatch } from '@/core/errors/errors/credentials-do-not-match'
 
 let inMemoryDeliverymansRepository: InMemoryDeliverymansRepository
 let sut: LoginDeliverymanUseCase
@@ -18,33 +19,47 @@ describe('Login Deliveryman', () => {
 
     inMemoryDeliverymansRepository.items.push(newDeliveryman)
 
-    const { deliveryman } = await sut.execute({
+    const result = await sut.execute({
       cpf: newDeliveryman.cpf,
       password: newDeliveryman.password,
     })
 
-    expect(deliveryman.name).toEqual('John Doe')
+    expect(result.isRight()).toBe(true)
+    expect(result.value).toMatchObject({
+      deliveryman: { name: 'John Doe', cpf: newDeliveryman.cpf },
+    })
   })
 
-  it('should not be able to do login on application with invalid data', async () => {
+  it('should not be able to do login on application with invalid cpf', async () => {
     const newDeliveryman = makeDeliveryman({
       name: 'John Doe',
     })
 
     inMemoryDeliverymansRepository.items.push(newDeliveryman)
 
-    expect(async () => {
-      await sut.execute({
-        cpf: 'Invalid cpf',
-        password: newDeliveryman.password,
-      })
-    }).rejects.toBeInstanceOf(Error)
+    const result = await sut.execute({
+      cpf: 'Invalid cpf',
+      password: newDeliveryman.password,
+    })
 
-    expect(async () => {
-      await sut.execute({
-        cpf: newDeliveryman.cpf,
-        password: 'Invalid password',
-      })
-    }).rejects.toBeInstanceOf(Error)
+    expect(result.isLeft()).toBe(true)
+    expect(result.value).toBeInstanceOf(CredentialsDoNotMatch)
+  })
+
+  it('should not be able to do login on application with invalid password', async () => {
+    const newDeliveryman = makeDeliveryman({
+      name: 'John Doe',
+      password: '123456',
+    })
+
+    inMemoryDeliverymansRepository.items.push(newDeliveryman)
+
+    const result = await sut.execute({
+      cpf: newDeliveryman.cpf,
+      password: 'Invalid password',
+    })
+
+    expect(result.isLeft()).toBe(true)
+    expect(result.value).toBeInstanceOf(CredentialsDoNotMatch)
   })
 })

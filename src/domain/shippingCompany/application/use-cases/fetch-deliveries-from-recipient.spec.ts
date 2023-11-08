@@ -4,6 +4,7 @@ import { FetchDeliveriesFromRecipientUseCase } from './fetch-deliveries-from-rec
 import { makeRecipient } from 'test/factories/make-recipient'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { makeOrder } from 'test/factories/make-order'
+import { ResourceNotFound } from '@/core/errors/errors/resource-not-found'
 
 let inMemoryRecipientsRepository: InMemoryRecipientsRepository
 let inMemoryOrdersRepository: InMemoryOrdersRepository
@@ -47,19 +48,14 @@ describe('Fetch deliveries from recipient', () => {
     inMemoryOrdersRepository.items.push(order2)
     inMemoryOrdersRepository.items.push(order3)
 
-    const { orders } = await sut.execute({
+    const result = await sut.execute({
       recipientId: recipient1.id.toString(),
     })
 
-    expect(orders).toHaveLength(2)
-    expect(orders).toEqual([
-      expect.objectContaining({
-        title: 'order-01',
-      }),
-      expect.objectContaining({
-        title: 'order-02',
-      }),
-    ])
+    expect(result.isRight()).toBe(true)
+    expect(result.value).toEqual({
+      orders: expect.arrayContaining([order1, order2]),
+    })
   })
 
   it('should not be able to list orders with invalid recipientId', async () => {
@@ -76,10 +72,11 @@ describe('Fetch deliveries from recipient', () => {
 
     expect(inMemoryOrdersRepository.items).toHaveLength(1)
 
-    expect(async () => {
-      await sut.execute({
-        recipientId: 'Invalid recipientId',
-      })
-    }).rejects.toBeInstanceOf(Error)
+    const result = await sut.execute({
+      recipientId: 'Invalid recipientId',
+    })
+
+    expect(result.isLeft()).toBe(true)
+    expect(result.value).toBeInstanceOf(ResourceNotFound)
   })
 })

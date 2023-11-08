@@ -1,5 +1,7 @@
+import { Either, left, right } from '@/core/either'
 import { Recipient } from '../../enterprise/entities/recipient'
 import { RecipientsRepository } from '../repositories/recipients-repository'
+import { EmailAlreadyExists } from '@/core/errors/errors/email-already-exists'
 
 interface CreateRecipientUseCaseRequest {
   name: string
@@ -12,9 +14,7 @@ interface CreateRecipientUseCaseRequest {
   longitude: number
 }
 
-interface CreateRecipientUseCaseResponse {
-  recipientCreated: void
-}
+type CreateRecipientUseCaseResponse = Either<EmailAlreadyExists, null>
 
 export class CreateRecipientUseCase {
   constructor(private recipientsRepository: RecipientsRepository) {}
@@ -40,8 +40,15 @@ export class CreateRecipientUseCase {
       longitude,
     })
 
-    const recipientCreated = await this.recipientsRepository.create(recipient)
+    const recipientWithSameEmail =
+      await this.recipientsRepository.findByEmail(email)
 
-    return { recipientCreated }
+    if (recipientWithSameEmail) {
+      return left(new EmailAlreadyExists())
+    }
+
+    await this.recipientsRepository.create(recipient)
+
+    return right(null)
   }
 }

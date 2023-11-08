@@ -1,6 +1,8 @@
 import { OrdersRepository } from '../repositories/orders-repository'
 import { RecipientsRepository } from '../repositories/recipients-repository'
 import { Order } from '../../enterprise/entities/order'
+import { Either, left, right } from '@/core/either'
+import { ResourceNotFound } from '@/core/errors/errors/resource-not-found'
 
 interface CreateOrderUseCaseRequest {
   recipientId: string
@@ -8,9 +10,7 @@ interface CreateOrderUseCaseRequest {
   status: string
 }
 
-interface CreateOrderUseCaseResponse {
-  orderCreated: void
-}
+type CreateOrderUseCaseResponse = Either<ResourceNotFound, null>
 
 export class CreateOrderUseCase {
   constructor(
@@ -26,7 +26,7 @@ export class CreateOrderUseCase {
     const recipient = await this.recipientsRepository.findById(recipientId)
 
     if (!recipient) {
-      throw new Error('Recipient not found')
+      return left(new ResourceNotFound())
     }
 
     const order = Order.create({
@@ -35,10 +35,8 @@ export class CreateOrderUseCase {
       status,
     })
 
-    const orderCreated = await this.ordersRepository.create(order)
+    await this.ordersRepository.create(order)
 
-    return {
-      orderCreated,
-    }
+    return right(null)
   }
 }

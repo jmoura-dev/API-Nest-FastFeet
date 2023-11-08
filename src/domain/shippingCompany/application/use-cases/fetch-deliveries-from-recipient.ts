@@ -1,14 +1,19 @@
+import { Either, left, right } from '@/core/either'
 import { Order } from '../../enterprise/entities/order'
 import { OrdersRepository } from '../repositories/orders-repository'
 import { RecipientsRepository } from '../repositories/recipients-repository'
+import { ResourceNotFound } from '@/core/errors/errors/resource-not-found'
 
 interface FetchDeliveriesFromRecipientRequest {
   recipientId: string
 }
 
-interface FetchDeliveriesFromRecipientResponse {
-  orders: Order[]
-}
+type FetchDeliveriesFromRecipientResponse = Either<
+  ResourceNotFound,
+  {
+    orders: Order[]
+  }
+>
 
 export class FetchDeliveriesFromRecipientUseCase {
   constructor(
@@ -22,14 +27,14 @@ export class FetchDeliveriesFromRecipientUseCase {
     const recipient = await this.recipientsRepository.findById(recipientId)
 
     if (!recipient) {
-      throw new Error('Recipient not found.')
+      return left(new ResourceNotFound())
     }
 
     const orders =
       await this.ordersRepository.findManyByRecipientId(recipientId)
 
-    return {
+    return right({
       orders,
-    }
+    })
   }
 }
