@@ -8,7 +8,7 @@ export interface OrderProps {
   recipientId: UniqueEntityID
   title: string
   status: string
-  attachment: string
+  attachment: string | null
   createdAt: Date
   updatedAt?: Date | null
 }
@@ -41,7 +41,7 @@ export class Order extends AggregateRoot<OrderProps> {
     return this.props.attachment
   }
 
-  set attachment(attachment: string) {
+  set attachment(attachment: string | null) {
     this.props.attachment = attachment
     this.touch()
   }
@@ -66,7 +66,7 @@ export class Order extends AggregateRoot<OrderProps> {
       {
         ...props,
         createdAt: props.createdAt ?? new Date(),
-        attachment: props.attachment ?? '',
+        attachment: props.attachment ?? null,
       },
       id,
     )

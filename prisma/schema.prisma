@@ -30,7 +30,7 @@ model Recipient {
   password      String
   slug          String  @unique
   city          String
-  neightborhood String
+  neighborhood String
   houseNumber   Int
   latitude      Decimal
   longitude     Decimal
@@ -43,7 +43,7 @@ model Order {
   id          String    @id @default(uuid())
   userId      String?   @map("user_id")
   recipientId String    @map("recipient_id")
-  title       String?
+  title       String
   status      String    @default("aguardando informações")
   attachment  String?
   createdAt   DateTime  @default(now()) @map("created_at")

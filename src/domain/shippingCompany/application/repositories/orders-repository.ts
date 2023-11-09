@@ -1,10 +1,14 @@
 import { Order } from '../../enterprise/entities/order'
 import { Coordinate } from '../../enterprise/entities/value-objects/location'
 
-export interface OrdersRepository {
-  create(order: Order): Promise<void>
-  findById(id: string): Promise<Order | null>
-  findManyByRecipientId(id: string): Promise<Order[]>
-  findManyNearbyDeliveries(id: string, location: Coordinate): Promise<Order[]>
-  save(order: Order): Promise<void>
+export abstract class OrdersRepository {
+  abstract create(order: Order): Promise<void>
+  abstract findById(id: string): Promise<Order | null>
+  abstract findManyByRecipientId(id: string): Promise<Order[]>
+  abstract findManyNearbyDeliveries(
+    id: string,
+    location: Coordinate,
+  ): Promise<Order[]>
+
+  abstract save(order: Order): Promise<void>
 }

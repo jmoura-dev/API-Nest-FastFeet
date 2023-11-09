@@ -5,7 +5,7 @@ export interface AdministratorProps {
   name: string
   cpf: string
   password: string
-  isAdmin: boolean
+  role: 'ADMIN' | 'DELIVERYMAN'
 }
 
 export class Administrator extends Entity<AdministratorProps> {
@@ -21,8 +21,8 @@ export class Administrator extends Entity<AdministratorProps> {
     return this.props.password
   }
 
-  get isAdmin() {
-    return this.props.isAdmin
+  get role() {
+    return this.props.role
   }
 
   static create(props: AdministratorProps, id?: UniqueEntityID) {
