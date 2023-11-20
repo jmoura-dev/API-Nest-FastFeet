@@ -3,6 +3,7 @@
     "deliverymans",
     "encrypter",
     "Encrypter",
+    "hasher",
     "Hasher"
   ]
 }
