@@ -1,5 +1,6 @@
 import { Entity } from '@/core/entities/entity'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
+import { Optional } from '@prisma/client/runtime/library'
 
 export interface AdministratorProps {
   name: string
@@ -25,8 +26,17 @@ export class Administrator extends Entity<AdministratorProps> {
     return this.props.role
   }
 
-  static create(props: AdministratorProps, id?: UniqueEntityID) {
-    const administrator = new Administrator(props, id)
+  static create(
+    props: Optional<AdministratorProps, 'role'>,
+    id?: UniqueEntityID,
+  ) {
+    const administrator = new Administrator(
+      {
+        ...props,
+        role: props.role ?? 'DELIVERYMAN',
+      },
+      id,
+    )
 
     return administrator
   }

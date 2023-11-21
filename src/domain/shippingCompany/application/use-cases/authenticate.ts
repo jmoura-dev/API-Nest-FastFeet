@@ -3,6 +3,7 @@ import { Encrypter } from '../cryptography/encrypter'
 import { HashComparer } from '../cryptography/hash-comparer'
 import { AdministratorsRepository } from '../repositories/administrators-repository'
 import { CredentialsDoNotMatch } from '@/core/errors/errors/credentials-do-not-match'
+import { Injectable } from '@nestjs/common'
 
 interface AuthenticateUseCaseRequest {
   cpf: string
@@ -16,6 +17,7 @@ type AuthenticateUseCaseResponse = Either<
   }
 >
 
+@Injectable()
 export class AuthenticateUseCase {
   constructor(
     private administratorsRepository: AdministratorsRepository,

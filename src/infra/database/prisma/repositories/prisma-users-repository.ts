@@ -2,7 +2,9 @@ import { AdministratorsRepository } from '@/domain/shippingCompany/application/r
 import { Administrator } from '@/domain/shippingCompany/enterprise/entities/administrator'
 import { PrismaService } from '../prisma.service'
 import { PrismaUsersMapper } from '../mappers/prisma-users-mapper'
+import { Injectable } from '@nestjs/common'
 
+@Injectable()
 export class PrismaUsersRepository implements AdministratorsRepository {
   constructor(private prisma: PrismaService) {}
 

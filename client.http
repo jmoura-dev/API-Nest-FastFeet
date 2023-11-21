@@ -6,8 +6,8 @@ POST {{baseUrl}}/users
 Content-Type: application/json
 
 {
-  "name": "John Doe",
-  "cpf": "28725945075",
+  "name": "Jonn Doe",
+  "cpf": "23525945075",
   "password": "123456"
 }
 
