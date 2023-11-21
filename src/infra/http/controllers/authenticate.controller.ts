@@ -11,6 +11,7 @@ import { compare } from 'bcryptjs'
 import { ZodValidationPipe } from '@/infra/http/pipes/zod-validation-pipe'
 import { PrismaService } from '@/infra/database/prisma/prisma.service'
 import { z } from 'zod'
+import { Public } from '@/infra/auth/public'
 
 const AuthenticateBodySchema = z.object({
   cpf: z.string(),
@@ -20,6 +21,7 @@ const AuthenticateBodySchema = z.object({
 type AuthenticateBodySchema = z.infer<typeof AuthenticateBodySchema>
 
 @Controller('/users')
+@Public()
 export class AuthenticateController {
   constructor(
     private prisma: PrismaService,

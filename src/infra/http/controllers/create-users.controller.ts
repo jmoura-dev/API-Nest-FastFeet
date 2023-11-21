@@ -10,6 +10,7 @@ import { hash } from 'bcryptjs'
 import { ZodValidationPipe } from '@/infra/http/pipes/zod-validation-pipe'
 import { PrismaService } from '@/infra/database/prisma/prisma.service'
 import { z } from 'zod'
+import { Public } from '@/infra/auth/public'
 
 const createUserBodySchema = z.object({
   name: z.string(),
@@ -20,6 +21,7 @@ const createUserBodySchema = z.object({
 type CreateUserBodySchema = z.infer<typeof createUserBodySchema>
 
 @Controller('/users')
+@Public()
 export class CreateUsersController {
   constructor(private prisma: PrismaService) {}
 
