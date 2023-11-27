@@ -2,7 +2,6 @@
 /dist
 /node_modules
 .env
-client.http
 data
 
 # Logs
@@ -36,3 +35,5 @@ lerna-debug.log*
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
+client.http
+FAKEREADME.MD

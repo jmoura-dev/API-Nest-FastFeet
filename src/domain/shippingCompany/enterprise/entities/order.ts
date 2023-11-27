@@ -26,6 +26,10 @@ export class Order extends AggregateRoot<OrderProps> {
     return this.props.title
   }
 
+  set title(title: string) {
+    this.props.title = title
+  }
+
   get status() {
     return this.props.status
   }
