@@ -31,11 +31,7 @@ export class CreateAccountUseCase {
       return left(new CpfAlreadyExists(cpf))
     }
 
-    console.log('password', password)
-
     const hashedPassword = await this.hashGenerator.hash(password)
-
-    console.log('hashedPassword', hashedPassword)
 
     const newAccountData = Administrator.create({
       name,

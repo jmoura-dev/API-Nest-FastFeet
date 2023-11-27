@@ -4,7 +4,7 @@ import { Optional } from '@/core/types/optional'
 import { ChangeStatusEvent } from '../events/change-status-events'
 
 export interface OrderProps {
-  deliverymanId?: UniqueEntityID | null
+  deliverymanId: UniqueEntityID | null
   recipientId: UniqueEntityID
   title: string
   status: string
@@ -16,6 +16,10 @@ export interface OrderProps {
 export class Order extends AggregateRoot<OrderProps> {
   get deliverymanId() {
     return this.props.deliverymanId
+  }
+
+  set deliverymanId(deliverymanId: UniqueEntityID | null) {
+    this.props.deliverymanId = deliverymanId
   }
 
   get recipientId() {
@@ -63,7 +67,7 @@ export class Order extends AggregateRoot<OrderProps> {
   }
 
   static create(
-    props: Optional<OrderProps, 'createdAt' | 'attachment'>,
+    props: Optional<OrderProps, 'createdAt' | 'attachment' | 'deliverymanId'>,
     id?: UniqueEntityID,
   ) {
     const order = new Order(
@@ -71,6 +75,7 @@ export class Order extends AggregateRoot<OrderProps> {
         ...props,
         createdAt: props.createdAt ?? new Date(),
         attachment: props.attachment ?? null,
+        deliverymanId: props.deliverymanId ?? null,
       },
       id,
     )

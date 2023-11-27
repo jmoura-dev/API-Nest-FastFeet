@@ -50,8 +50,6 @@ describe('On change status', () => {
 
     inMemoryOrdersRepository.save(order)
 
-    console.log(sendNotificationExecuteSpy)
-
     await waitFor(() => {
       expect(sendNotificationExecuteSpy).toHaveBeenCalled()
     })
