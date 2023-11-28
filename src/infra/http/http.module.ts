@@ -7,6 +7,8 @@ import { CreateAccountUseCase } from '@/domain/shippingCompany/application/use-c
 import { AuthenticateUseCase } from '@/domain/shippingCompany/application/use-cases/authenticate'
 import { EditOrderStatusController } from './controllers/edit-order-status.controller'
 import { EditOrderStatusUseCase } from '@/domain/shippingCompany/application/use-cases/edit-order-status'
+import { FetchListNearbyDeliveries } from './controllers/fetch-list-nearby-deliveries.controller'
+import { ListNearbyDeliveriesUseCase } from '@/domain/shippingCompany/application/use-cases/list-nearby-deliveries'
 
 @Module({
   imports: [DatabaseModule, CryptographyModule],
@@ -14,11 +16,13 @@ import { EditOrderStatusUseCase } from '@/domain/shippingCompany/application/use
     CreateUsersController,
     AuthenticateController,
     EditOrderStatusController,
+    FetchListNearbyDeliveries,
   ],
   providers: [
     CreateAccountUseCase,
     AuthenticateUseCase,
     EditOrderStatusUseCase,
+    ListNearbyDeliveriesUseCase,
   ],
 })
 export class HttpModule {}

@@ -56,7 +56,7 @@ export class PrismaOrdersRepository implements OrdersRepository {
 
     const nearbyOrders = await this.prisma.order.findMany({
       where: {
-        id,
+        userId: id,
         recipientId: {
           in: nearbyRecipients.map((recipient) => recipient.id),
         },
