@@ -2,7 +2,6 @@ import { INestApplication } from '@nestjs/common'
 import request from 'supertest'
 import { Test } from '@nestjs/testing'
 import { AppModule } from '@/infra/app.module'
-import { PrismaService } from '@/infra/database/prisma/prisma.service'
 import { OrderFactory } from 'test/factories/make-order'
 import { DatabaseModule } from '@/infra/database/database.module'
 import { AdministratorFactory } from 'test/factories/make-administrator'
@@ -11,7 +10,6 @@ import { RecipientFactory } from 'test/factories/make-recipient'
 
 describe('Fetch nearby deliveries (E2E)', () => {
   let app: INestApplication
-  let prisma: PrismaService
   let orderFactory: OrderFactory
   let recipientFactory: RecipientFactory
   let administratorFactory: AdministratorFactory
@@ -24,7 +22,6 @@ describe('Fetch nearby deliveries (E2E)', () => {
     }).compile()
 
     app = moduleRef.createNestApplication()
-    prisma = moduleRef.get(PrismaService)
     jwt = moduleRef.get(JwtService)
 
     orderFactory = moduleRef.get(OrderFactory)
