@@ -3,6 +3,7 @@ import { ResourceNotFound } from '@/core/errors/errors/resource-not-found'
 import { OrdersRepository } from '../repositories/orders-repository'
 import { AdministratorsRepository } from '../repositories/administrators-repository'
 import { Order } from '../../enterprise/entities/order'
+import { Injectable } from '@nestjs/common'
 
 interface EditOrderStatusUseCaseRequest {
   administratorId: string
@@ -13,6 +14,7 @@ interface EditOrderStatusUseCaseRequest {
 
 type EditOrderStatusUseCaseResponse = Either<ResourceNotFound, { order: Order }>
 
+@Injectable()
 export class EditOrderStatusUseCase {
   constructor(
     private ordersRepository: OrdersRepository,
@@ -38,8 +40,8 @@ export class EditOrderStatusUseCase {
       return left(new ResourceNotFound())
     }
 
-    order.title = title
-    order.status = status
+    order.title = title ?? order.title
+    order.status = status ?? order.status
 
     await this.ordersRepository.save(order)
 

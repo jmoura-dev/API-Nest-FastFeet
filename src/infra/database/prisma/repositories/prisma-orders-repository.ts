@@ -4,7 +4,9 @@ import { Coordinate } from '@/domain/shippingCompany/enterprise/entities/value-o
 import { PrismaOrdersMapper } from '../mappers/prisma-orders-mapper'
 import { PrismaService } from '../prisma.service'
 import { Recipient as PrismaRecipient } from '@prisma/client'
+import { Injectable } from '@nestjs/common'
 
+@Injectable()
 export class PrismaOrdersRepository implements OrdersRepository {
   constructor(private prisma: PrismaService) {}
 

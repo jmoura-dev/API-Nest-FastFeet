@@ -22,7 +22,7 @@ export class PrismaOrdersMapper {
     return {
       id: order.id.toString(),
       recipientId: order.recipientId.toString(),
-      userId: order.deliverymanId?.toString(),
+      userId: order.deliverymanId ? order.deliverymanId.toString() : null,
       title: order.title,
       status: order.status,
     }

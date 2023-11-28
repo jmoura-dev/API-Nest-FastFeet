@@ -4,6 +4,9 @@ import {
   DeliverymanProps,
 } from '@/domain/shippingCompany/enterprise/entities/deliveryman'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
+import { PrismaService } from '@/infra/database/prisma/prisma.service'
+import { Injectable } from '@nestjs/common'
+import { PrismaDeliverymansMapper } from '@/infra/database/prisma/mappers/prisma-deliveryman-mapper'
 
 export function makeDeliveryman(
   override: Partial<DeliverymanProps> = {},
@@ -21,4 +24,21 @@ export function makeDeliveryman(
   )
 
   return deliveryman
+}
+
+@Injectable()
+export class DeliverymanFactory {
+  constructor(private prisma: PrismaService) {}
+
+  async makePrismaDeliveryman(
+    data: Partial<DeliverymanProps> = {},
+  ): Promise<Deliveryman> {
+    const deliveryman = makeDeliveryman(data)
+
+    await this.prisma.user.create({
+      data: PrismaDeliverymansMapper.toPrisma(deliveryman),
+    })
+
+    return deliveryman
+  }
 }

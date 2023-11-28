@@ -24,17 +24,18 @@ model User {
 }
 
 model Recipient {
-  id            String  @id @default(uuid())
-  name          String
-  email         String  @unique
-  password      String
-  slug          String  @unique
-  city          String
+  id           String         @id @default(uuid())
+  name         String
+  email        String         @unique
+  password     String
+  slug         String         @unique
+  city         String
   neighborhood String
-  houseNumber   Int
-  latitude      Decimal
-  longitude     Decimal
-  orders        Order[]
+  houseNumber  Int
+  latitude     Decimal
+  longitude    Decimal
+  orders       Order[]
+  Notification Notification[]
 
   @@map("recipients")
 }
@@ -53,4 +54,17 @@ model Order {
   recipient Recipient @relation(fields: [recipientId], references: [id])
 
   @@map("orders")
+}
+
+model Notification {
+  id          String    @id @default(uuid())
+  recipientId String    @map("recipient_id")
+  title       String
+  content     String
+  readAt      DateTime? @map("read_at")
+  createdAt   DateTime  @default(now()) @map("created_at")
+
+  recipient Recipient @relation(fields: [recipientId], references: [id])
+
+  @@map("notifications")
 }
