@@ -81,8 +81,8 @@ describe('Fetch nearby deliveries (E2E)', () => {
     expect(result.statusCode).toBe(200)
     expect(result.body).toEqual({
       orders: [
-        expect.objectContaining({ status: 'Pedido-01', title: 'Pedido-01' }),
         expect.objectContaining({ status: 'Pedido-03', title: 'Pedido-03' }),
+        expect.objectContaining({ status: 'Pedido-01', title: 'Pedido-01' }),
       ],
     })
   })

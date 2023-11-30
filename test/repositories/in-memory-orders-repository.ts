@@ -6,6 +6,7 @@ import {
   getDistanceBetweenCoordinates,
 } from '@/domain/shippingCompany/enterprise/entities/value-objects/location'
 import { DomainEvents } from '@/core/events/domain-events'
+import { PaginationParams } from '@/core/repositories/pagination-params'
 
 export class InMemoryOrdersRepository implements OrdersRepository {
   constructor(private recipientsRepository: InMemoryRecipientsRepository) {}
@@ -34,7 +35,11 @@ export class InMemoryOrdersRepository implements OrdersRepository {
     return orders
   }
 
-  async findManyNearbyDeliveries(deliverymanId: string, location: Coordinate) {
+  async findManyNearbyDeliveries(
+    { page }: PaginationParams,
+    deliverymanId: string,
+    location: Coordinate,
+  ) {
     const orders = this.items.filter(
       (order) => order.deliverymanId?.toString() === deliverymanId,
     )

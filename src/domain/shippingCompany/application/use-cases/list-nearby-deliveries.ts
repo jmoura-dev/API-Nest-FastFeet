@@ -6,6 +6,7 @@ import { Order } from '../../enterprise/entities/order'
 import { Injectable } from '@nestjs/common'
 
 interface ListNearbyDeliveriesUseCaseRequest {
+  page: number
   deliverymanId: string
   latitude: number
   longitude: number
@@ -26,6 +27,7 @@ export class ListNearbyDeliveriesUseCase {
   ) {}
 
   async execute({
+    page,
     deliverymanId,
     latitude,
     longitude,
@@ -38,6 +40,7 @@ export class ListNearbyDeliveriesUseCase {
     }
 
     const orders = await this.ordersRepository.findManyNearbyDeliveries(
+      { page },
       deliverymanId,
       { latitude, longitude },
     )

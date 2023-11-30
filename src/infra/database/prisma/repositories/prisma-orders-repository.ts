@@ -5,6 +5,7 @@ import { PrismaOrdersMapper } from '../mappers/prisma-orders-mapper'
 import { PrismaService } from '../prisma.service'
 import { Recipient as PrismaRecipient } from '@prisma/client'
 import { Injectable } from '@nestjs/common'
+import { PaginationParams } from '@/core/repositories/pagination-params'
 
 @Injectable()
 export class PrismaOrdersRepository implements OrdersRepository {
@@ -43,6 +44,7 @@ export class PrismaOrdersRepository implements OrdersRepository {
   }
 
   async findManyNearbyDeliveries(
+    { page }: PaginationParams,
     id: string,
     { latitude, longitude }: Coordinate,
   ) {
@@ -61,6 +63,11 @@ export class PrismaOrdersRepository implements OrdersRepository {
           in: nearbyRecipients.map((recipient) => recipient.id),
         },
       },
+      orderBy: {
+        createdAt: 'desc',
+      },
+      take: 20,
+      skip: (page - 1) * 20,
     })
 
     return nearbyOrders.map((order) => PrismaOrdersMapper.toDomain(order))

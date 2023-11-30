@@ -5,6 +5,7 @@ import {
   Controller,
   Get,
   HttpCode,
+  Query,
 } from '@nestjs/common'
 import { z } from 'zod'
 import { ZodValidationPipe } from '../pipes/zod-validation-pipe'
@@ -19,7 +20,17 @@ const createBodyOrdersSchema = z.object({
 
 const bodyValidationPipe = new ZodValidationPipe(createBodyOrdersSchema)
 
+const pageQueryParamSchema = z
+  .string()
+  .optional()
+  .default('1')
+  .transform(Number)
+  .pipe(z.number().min(1))
+
+const queryValidationPipe = new ZodValidationPipe(pageQueryParamSchema)
+
 type CreateBodyOrdersSchema = z.infer<typeof createBodyOrdersSchema>
+type PageQueryParamSchema = z.infer<typeof pageQueryParamSchema>
 
 @Controller('/orders/:deliverymanId')
 export class FetchListNearbyDeliveries {
@@ -31,12 +42,14 @@ export class FetchListNearbyDeliveries {
   @HttpCode(200)
   async handle(
     @Body(bodyValidationPipe) body: CreateBodyOrdersSchema,
+    @Query('page', queryValidationPipe) page: PageQueryParamSchema,
     @CurrentUser() user: UserPayload,
   ) {
     const { latitude, longitude } = body
     const { sub: deliverymanId } = user
 
     const result = await this.listNearbyDeliveriesUseCase.execute({
+      page,
       deliverymanId,
       latitude,
       longitude,
