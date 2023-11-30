@@ -7,10 +7,12 @@ import { CreateAccountUseCase } from '@/domain/shippingCompany/application/use-c
 import { AuthenticateUseCase } from '@/domain/shippingCompany/application/use-cases/authenticate'
 import { EditOrderStatusController } from './controllers/edit-order-status.controller'
 import { EditOrderStatusUseCase } from '@/domain/shippingCompany/application/use-cases/edit-order-status'
-import { FetchListNearbyDeliveries } from './controllers/fetch-list-nearby-deliveries.controller'
+import { FetchListNearbyDeliveriesController } from './controllers/fetch-list-nearby-deliveries.controller'
 import { ListNearbyDeliveriesUseCase } from '@/domain/shippingCompany/application/use-cases/list-nearby-deliveries'
-import { PickUpOrderForDelivery } from './controllers/pick-up-order-for-delivery.controller'
+import { PickUpOrderForDeliveryController } from './controllers/pick-up-order-for-delivery.controller'
 import { PickUpOrderForDeliveryUseCase } from '@/domain/shippingCompany/application/use-cases/pick-up-order-for-delivery'
+import { MarkOrderAsDeliveredController } from './controllers/mark-order-as-delivered.controller'
+import { MarkOrderAsDeliveredUseCase } from '@/domain/shippingCompany/application/use-cases/mark-order-as-delivered'
 
 @Module({
   imports: [DatabaseModule, CryptographyModule],
@@ -18,8 +20,9 @@ import { PickUpOrderForDeliveryUseCase } from '@/domain/shippingCompany/applicat
     CreateUsersController,
     AuthenticateController,
     EditOrderStatusController,
-    FetchListNearbyDeliveries,
-    PickUpOrderForDelivery,
+    FetchListNearbyDeliveriesController,
+    PickUpOrderForDeliveryController,
+    MarkOrderAsDeliveredController,
   ],
   providers: [
     CreateAccountUseCase,
@@ -27,6 +30,7 @@ import { PickUpOrderForDeliveryUseCase } from '@/domain/shippingCompany/applicat
     EditOrderStatusUseCase,
     ListNearbyDeliveriesUseCase,
     PickUpOrderForDeliveryUseCase,
+    MarkOrderAsDeliveredUseCase,
   ],
 })
 export class HttpModule {}

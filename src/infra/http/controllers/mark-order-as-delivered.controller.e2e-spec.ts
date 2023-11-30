@@ -34,7 +34,7 @@ describe('Edit order status (E2E)', () => {
     await app.init()
   })
 
-  test('[PUT] /orders/:orderId/:deliverymanId', async () => {
+  test('[PUT] /orders/:orderId/:deliverymanId/delivered', async () => {
     const user = await administratorFactory.makePrismaAdministrator()
     const accessToken = jwt.sign({ sub: user.id.toString() })
 
@@ -42,7 +42,7 @@ describe('Edit order status (E2E)', () => {
 
     const order = await orderFactory.makePrismaOrder({
       recipientId: recipient.id,
-      deliverymanId: null,
+      deliverymanId: user.id,
       status: 'Aguardando retirada',
       title: 'Aguardando retirada',
     })
@@ -51,9 +51,11 @@ describe('Edit order status (E2E)', () => {
     const deliverymanId = user.id.toString()
 
     const result = await request(app.getHttpServer())
-      .put(`/orders/${orderId}/${deliverymanId}`)
+      .put(`/orders/${orderId}/${deliverymanId}/delivered`)
       .set('Authorization', `Bearer ${accessToken}`)
-      .send()
+      .send({
+        attachment: 'imagem.png',
+      })
 
     expect(result.statusCode).toBe(200)
 
@@ -66,8 +68,9 @@ describe('Edit order status (E2E)', () => {
     expect(orderOnDatabase).toBeTruthy()
     expect(orderOnDatabase).toEqual(
       expect.objectContaining({
-        status: 'Pedido saiu para entrega!',
-        title: 'Pedido retirado pelo entregador.',
+        title: 'Pedido entregue.',
+        status: 'Pedido entregue com sucesso!',
+        attachment: 'imagem.png',
       }),
     )
   })

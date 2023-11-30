@@ -33,7 +33,7 @@ type CreateBodyOrdersSchema = z.infer<typeof createBodyOrdersSchema>
 type PageQueryParamSchema = z.infer<typeof pageQueryParamSchema>
 
 @Controller('/orders/:deliverymanId')
-export class FetchListNearbyDeliveries {
+export class FetchListNearbyDeliveriesController {
   constructor(
     private listNearbyDeliveriesUseCase: ListNearbyDeliveriesUseCase,
   ) {}

@@ -25,6 +25,9 @@ export class PrismaOrdersMapper {
       userId: order.deliverymanId ? order.deliverymanId.toString() : null,
       title: order.title,
       status: order.status,
+      attachment: order.attachment,
+      createdAt: order.createdAt,
+      updatedAt: order.updatedAt,
     }
   }
 }

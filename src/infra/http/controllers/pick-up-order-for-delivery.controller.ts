@@ -10,7 +10,7 @@ import {
 } from '@nestjs/common'
 
 @Controller('/orders/:orderId/:deliverymanId')
-export class PickUpOrderForDelivery {
+export class PickUpOrderForDeliveryController {
   constructor(private pickUpOrderForDelivery: PickUpOrderForDeliveryUseCase) {}
 
   @Put()

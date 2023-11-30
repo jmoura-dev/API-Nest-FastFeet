@@ -42,13 +42,13 @@ describe('Update status to delivered', () => {
     const result = await sut.execute({
       deliverymanId,
       orderId,
-      status: 'Entregue',
       attachment: 'image.png',
     })
 
     expect(result.isRight()).toBe(true)
     expect(inMemoryOrdersRepository.items[0]).toMatchObject({
-      status: 'Entregue',
+      title: 'Pedido entregue.',
+      status: 'Pedido entregue com sucesso!',
       attachment: 'image.png',
     })
   })
@@ -57,7 +57,8 @@ describe('Update status to delivered', () => {
     const deliveryman = makeDeliveryman()
     const order = makeOrder(
       {
-        status: 'pedido feito',
+        title: 'Pedido entregue.',
+        status: 'Pedido entregue com sucesso!',
         deliverymanId: deliveryman.id,
       },
       new UniqueEntityID('order-01'),
@@ -71,7 +72,6 @@ describe('Update status to delivered', () => {
     const result = await sut.execute({
       deliverymanId,
       orderId: 'invalid order ID',
-      status: 'Aguardando retirada',
       attachment: 'image.png',
     })
 
@@ -94,7 +94,6 @@ describe('Update status to delivered', () => {
     const result = await sut.execute({
       deliverymanId: 'invalid deliveryman ID',
       orderId,
-      status: 'Entregue',
       attachment: 'image.png',
     })
 
@@ -118,7 +117,6 @@ describe('Update status to delivered', () => {
     const result = await sut.execute({
       deliverymanId,
       orderId,
-      status: 'Entregue',
       attachment: '',
     })
 
