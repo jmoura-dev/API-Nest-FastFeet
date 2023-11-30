@@ -35,6 +35,14 @@ export class InMemoryOrdersRepository implements OrdersRepository {
     return orders
   }
 
+  async findManyByDeliverymanId({ page }: PaginationParams, id: string) {
+    const orders = this.items
+      .filter((order) => order.deliverymanId?.toString() === id)
+      .slice((page - 1) * 20, page * 20)
+
+    return orders
+  }
+
   async findManyNearbyDeliveries(
     _,
     deliverymanId: string,

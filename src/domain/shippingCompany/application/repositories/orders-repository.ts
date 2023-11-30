@@ -10,6 +10,11 @@ export abstract class OrdersRepository {
     id: string,
   ): Promise<Order[]>
 
+  abstract findManyByDeliverymanId(
+    params: PaginationParams,
+    id: string,
+  ): Promise<Order[]>
+
   abstract findManyNearbyDeliveries(
     params: PaginationParams,
     id: string,

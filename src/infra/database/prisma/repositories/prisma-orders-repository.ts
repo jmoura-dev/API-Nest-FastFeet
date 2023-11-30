@@ -51,6 +51,24 @@ export class PrismaOrdersRepository implements OrdersRepository {
     return orders.map((order) => PrismaOrdersMapper.toDomain(order))
   }
 
+  async findManyByDeliverymanId(
+    { page }: PaginationParams,
+    id: string,
+  ): Promise<Order[]> {
+    const orders = await this.prisma.order.findMany({
+      where: {
+        userId: id,
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+      take: 20,
+      skip: (page - 1) * 20,
+    })
+
+    return orders.map((order) => PrismaOrdersMapper.toDomain(order))
+  }
+
   async findManyNearbyDeliveries(
     { page }: PaginationParams,
     id: string,

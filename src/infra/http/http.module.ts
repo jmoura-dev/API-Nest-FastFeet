@@ -15,6 +15,8 @@ import { MarkOrderAsDeliveredController } from './controllers/mark-order-as-deli
 import { MarkOrderAsDeliveredUseCase } from '@/domain/shippingCompany/application/use-cases/mark-order-as-delivered'
 import { FetchDeliveriesFromRecipientController } from './controllers/fetch-deliveries-from-recipient.controller'
 import { FetchDeliveriesFromRecipientUseCase } from '@/domain/shippingCompany/application/use-cases/fetch-deliveries-from-recipient'
+import { FetchDeliveriesFromDeliverymanController } from './controllers/fetch-deliveries-from-deliveryman.controller'
+import { FetchDeliveriesFromDeliverymanUseCase } from '@/domain/shippingCompany/application/use-cases/fetch-deliveries-from-deliveryman'
 
 @Module({
   imports: [DatabaseModule, CryptographyModule],
@@ -26,6 +28,7 @@ import { FetchDeliveriesFromRecipientUseCase } from '@/domain/shippingCompany/ap
     PickUpOrderForDeliveryController,
     MarkOrderAsDeliveredController,
     FetchDeliveriesFromRecipientController,
+    FetchDeliveriesFromDeliverymanController,
   ],
   providers: [
     CreateAccountUseCase,
@@ -35,6 +38,7 @@ import { FetchDeliveriesFromRecipientUseCase } from '@/domain/shippingCompany/ap
     PickUpOrderForDeliveryUseCase,
     MarkOrderAsDeliveredUseCase,
     FetchDeliveriesFromRecipientUseCase,
+    FetchDeliveriesFromDeliverymanUseCase,
   ],
 })
 export class HttpModule {}
