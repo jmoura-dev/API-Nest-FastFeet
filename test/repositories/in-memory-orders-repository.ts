@@ -27,16 +27,16 @@ export class InMemoryOrdersRepository implements OrdersRepository {
     return order
   }
 
-  async findManyByRecipientId(id: string) {
-    const orders = this.items.filter(
-      (order) => order.recipientId.toString() === id,
-    )
+  async findManyByRecipientId({ page }: PaginationParams, id: string) {
+    const orders = this.items
+      .filter((order) => order.recipientId.toString() === id)
+      .slice((page - 1) * 20, page * 20)
 
     return orders
   }
 
   async findManyNearbyDeliveries(
-    { page }: PaginationParams,
+    _,
     deliverymanId: string,
     location: Coordinate,
   ) {

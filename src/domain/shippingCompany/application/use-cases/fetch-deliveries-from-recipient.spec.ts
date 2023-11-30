@@ -49,6 +49,7 @@ describe('Fetch deliveries from recipient', () => {
     inMemoryOrdersRepository.items.push(order3)
 
     const result = await sut.execute({
+      page: 1,
       recipientId: recipient1.id.toString(),
     })
 
@@ -73,6 +74,7 @@ describe('Fetch deliveries from recipient', () => {
     expect(inMemoryOrdersRepository.items).toHaveLength(1)
 
     const result = await sut.execute({
+      page: 1,
       recipientId: 'Invalid recipientId',
     })
 

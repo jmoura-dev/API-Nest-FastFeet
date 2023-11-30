@@ -3,8 +3,10 @@ import { Order } from '../../enterprise/entities/order'
 import { OrdersRepository } from '../repositories/orders-repository'
 import { RecipientsRepository } from '../repositories/recipients-repository'
 import { ResourceNotFound } from '@/core/errors/errors/resource-not-found'
+import { Injectable } from '@nestjs/common'
 
 interface FetchDeliveriesFromRecipientRequest {
+  page: number
   recipientId: string
 }
 
@@ -15,6 +17,7 @@ type FetchDeliveriesFromRecipientResponse = Either<
   }
 >
 
+@Injectable()
 export class FetchDeliveriesFromRecipientUseCase {
   constructor(
     private recipientsRepository: RecipientsRepository,
@@ -22,6 +25,7 @@ export class FetchDeliveriesFromRecipientUseCase {
   ) {}
 
   async execute({
+    page,
     recipientId,
   }: FetchDeliveriesFromRecipientRequest): Promise<FetchDeliveriesFromRecipientResponse> {
     const recipient = await this.recipientsRepository.findById(recipientId)
@@ -30,8 +34,10 @@ export class FetchDeliveriesFromRecipientUseCase {
       return left(new ResourceNotFound())
     }
 
-    const orders =
-      await this.ordersRepository.findManyByRecipientId(recipientId)
+    const orders = await this.ordersRepository.findManyByRecipientId(
+      { page },
+      recipientId,
+    )
 
     return right({
       orders,

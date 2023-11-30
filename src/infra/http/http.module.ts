@@ -13,6 +13,8 @@ import { PickUpOrderForDeliveryController } from './controllers/pick-up-order-fo
 import { PickUpOrderForDeliveryUseCase } from '@/domain/shippingCompany/application/use-cases/pick-up-order-for-delivery'
 import { MarkOrderAsDeliveredController } from './controllers/mark-order-as-delivered.controller'
 import { MarkOrderAsDeliveredUseCase } from '@/domain/shippingCompany/application/use-cases/mark-order-as-delivered'
+import { FetchDeliveriesFromRecipientController } from './controllers/fetch-deliveries-from-recipient.controller'
+import { FetchDeliveriesFromRecipientUseCase } from '@/domain/shippingCompany/application/use-cases/fetch-deliveries-from-recipient'
 
 @Module({
   imports: [DatabaseModule, CryptographyModule],
@@ -23,6 +25,7 @@ import { MarkOrderAsDeliveredUseCase } from '@/domain/shippingCompany/applicatio
     FetchListNearbyDeliveriesController,
     PickUpOrderForDeliveryController,
     MarkOrderAsDeliveredController,
+    FetchDeliveriesFromRecipientController,
   ],
   providers: [
     CreateAccountUseCase,
@@ -31,6 +34,7 @@ import { MarkOrderAsDeliveredUseCase } from '@/domain/shippingCompany/applicatio
     ListNearbyDeliveriesUseCase,
     PickUpOrderForDeliveryUseCase,
     MarkOrderAsDeliveredUseCase,
+    FetchDeliveriesFromRecipientUseCase,
   ],
 })
 export class HttpModule {}
