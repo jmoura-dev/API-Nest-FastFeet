@@ -9,6 +9,8 @@ import { EditOrderStatusController } from './controllers/edit-order-status.contr
 import { EditOrderStatusUseCase } from '@/domain/shippingCompany/application/use-cases/edit-order-status'
 import { FetchListNearbyDeliveries } from './controllers/fetch-list-nearby-deliveries.controller'
 import { ListNearbyDeliveriesUseCase } from '@/domain/shippingCompany/application/use-cases/list-nearby-deliveries'
+import { PickUpOrderForDelivery } from './controllers/pick-up-order-for-delivery.controller'
+import { PickUpOrderForDeliveryUseCase } from '@/domain/shippingCompany/application/use-cases/pick-up-order-for-delivery'
 
 @Module({
   imports: [DatabaseModule, CryptographyModule],
@@ -17,12 +19,14 @@ import { ListNearbyDeliveriesUseCase } from '@/domain/shippingCompany/applicatio
     AuthenticateController,
     EditOrderStatusController,
     FetchListNearbyDeliveries,
+    PickUpOrderForDelivery,
   ],
   providers: [
     CreateAccountUseCase,
     AuthenticateUseCase,
     EditOrderStatusUseCase,
     ListNearbyDeliveriesUseCase,
+    PickUpOrderForDeliveryUseCase,
   ],
 })
 export class HttpModule {}

@@ -4,6 +4,7 @@ import { OrdersRepository } from '../repositories/orders-repository'
 import { ResourceNotFound } from '@/core/errors/errors/resource-not-found'
 import { Order } from '../../enterprise/entities/order'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
+import { Injectable } from '@nestjs/common'
 
 interface PickUpOrderForDeliveryUseCaseRequest {
   deliverymanId: string
@@ -17,6 +18,7 @@ type PickUpOrderForDeliveryUseCaseResponse = Either<
   }
 >
 
+@Injectable()
 export class PickUpOrderForDeliveryUseCase {
   constructor(
     private ordersRepository: OrdersRepository,
