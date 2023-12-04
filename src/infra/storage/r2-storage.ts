@@ -23,7 +23,7 @@ export class R2Storage implements Uploader {
       credentials: {
         accessKeyId,
         secretAccessKey,
-      }
+      },
     })
   }
 
@@ -41,7 +41,7 @@ export class R2Storage implements Uploader {
         Key: uniqueFileName,
         ContentType: fileType,
         Body: body,
-      })
+      }),
     )
 
     return {

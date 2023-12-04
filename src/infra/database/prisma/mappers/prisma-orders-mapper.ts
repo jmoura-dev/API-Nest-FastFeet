@@ -10,7 +10,7 @@ export class PrismaOrdersMapper {
         deliverymanId: raw.userId ? new UniqueEntityID(raw.userId) : null,
         title: raw.title,
         status: raw.status,
-        attachment: raw.attachment ?? null,
+        attachment: raw.attachmentId ?? null,
         createdAt: raw.createdAt,
         updatedAt: raw.updatedAt,
       },
@@ -25,7 +25,7 @@ export class PrismaOrdersMapper {
       userId: order.deliverymanId ? order.deliverymanId.toString() : null,
       title: order.title,
       status: order.status,
-      attachment: order.attachment,
+      attachmentId: order.attachment,
       createdAt: order.createdAt,
       updatedAt: order.updatedAt,
     }

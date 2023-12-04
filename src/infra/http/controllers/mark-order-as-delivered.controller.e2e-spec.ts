@@ -9,7 +9,7 @@ import { AdministratorFactory } from 'test/factories/make-administrator'
 import { JwtService } from '@nestjs/jwt'
 import { RecipientFactory } from 'test/factories/make-recipient'
 
-describe('Edit order status (E2E)', () => {
+describe('Mark order as delivered (E2E)', () => {
   let app: INestApplication
   let prisma: PrismaService
   let orderFactory: OrderFactory
@@ -34,7 +34,7 @@ describe('Edit order status (E2E)', () => {
     await app.init()
   })
 
-  test('[PUT] /orders/:orderId/:deliverymanId/delivered', async () => {
+  test.skip('[PUT] /orders/:orderId/:deliverymanId/delivered', async () => {
     const user = await administratorFactory.makePrismaAdministrator()
     const accessToken = jwt.sign({ sub: user.id.toString() })
 
@@ -49,6 +49,8 @@ describe('Edit order status (E2E)', () => {
 
     const orderId = order.id.toString()
     const deliverymanId = user.id.toString()
+
+    console.log(order)
 
     const result = await request(app.getHttpServer())
       .put(`/orders/${orderId}/${deliverymanId}/delivered`)

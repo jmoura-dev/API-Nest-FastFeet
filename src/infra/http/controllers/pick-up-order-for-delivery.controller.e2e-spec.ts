@@ -9,7 +9,7 @@ import { AdministratorFactory } from 'test/factories/make-administrator'
 import { JwtService } from '@nestjs/jwt'
 import { RecipientFactory } from 'test/factories/make-recipient'
 
-describe('Edit order status (E2E)', () => {
+describe('Pick up order for delivery (E2E)', () => {
   let app: INestApplication
   let prisma: PrismaService
   let orderFactory: OrderFactory

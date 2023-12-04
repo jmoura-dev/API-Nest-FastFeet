@@ -41,19 +41,30 @@ model Recipient {
 }
 
 model Order {
-  id          String    @id @default(uuid())
-  userId      String?   @map("user_id")
-  recipientId String    @map("recipient_id")
-  title       String
-  status      String    @default("aguardando informações")
-  attachment  String?
-  createdAt   DateTime  @default(now()) @map("created_at")
-  updatedAt   DateTime? @updatedAt @map("updated_at")
+  id           String    @id @default(uuid())
+  userId       String?   @map("user_id")
+  recipientId  String    @map("recipient_id")
+  attachmentId String?   @map("attachment_id")
+  title        String
+  status       String    @default("aguardando informações")
+  createdAt    DateTime  @default(now()) @map("created_at")
+  updatedAt    DateTime? @updatedAt @map("updated_at")
 
-  user      User?     @relation(fields: [userId], references: [id])
-  recipient Recipient @relation(fields: [recipientId], references: [id])
+  user       User?       @relation(fields: [userId], references: [id])
+  recipient  Recipient   @relation(fields: [recipientId], references: [id])
+  attachment Attachment? @relation(fields: [attachmentId], references: [id])
 
   @@map("orders")
+}
+
+model Attachment {
+  id      String  @id @default(uuid())
+  title   String
+  url     String
+  orderId String? @unique @map("order_id")
+  Order   Order[]
+
+  @@map("attachments")
 }
 
 model Notification {

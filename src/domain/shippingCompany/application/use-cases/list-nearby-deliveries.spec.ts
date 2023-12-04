@@ -66,6 +66,7 @@ describe('Fetch nearby deliveries list', () => {
     const deliverymanId = deliveryman.id.toString()
 
     const result = await sut.execute({
+      page: 1,
       deliverymanId,
       latitude: -9.600538,
       longitude: -35.7608173,
@@ -99,6 +100,7 @@ describe('Fetch nearby deliveries list', () => {
     inMemoryOrdersRepository.items.push(order)
 
     const result = await sut.execute({
+      page: 1,
       deliverymanId: 'invalid-deliveryman-id',
       latitude: -9.600538,
       longitude: -35.7608173,
