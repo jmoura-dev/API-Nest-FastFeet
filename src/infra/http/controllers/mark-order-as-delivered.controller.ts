@@ -14,7 +14,7 @@ import { ZodValidationPipe } from '../pipes/zod-validation-pipe'
 import { NotAllowed } from '@/core/errors/errors/not-allowed'
 
 const createBodyValidationSchema = z.object({
-  attachment: z.string(),
+  attachmentId: z.string(),
 })
 
 const bodyValidationPipe = new ZodValidationPipe(createBodyValidationSchema)
@@ -32,12 +32,12 @@ export class MarkOrderAsDeliveredController {
     @Body(bodyValidationPipe) body: CreateBodyValidationSchema,
   ) {
     const { sub: deliverymanId } = user
-    const { attachment } = body
+    const { attachmentId } = body
 
     const result = await this.markOrderAsDelivered.execute({
       deliverymanId,
       orderId,
-      attachment,
+      attachmentId,
     })
 
     if (result.isLeft()) {

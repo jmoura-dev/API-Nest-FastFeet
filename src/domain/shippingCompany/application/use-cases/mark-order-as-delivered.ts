@@ -5,11 +5,12 @@ import { Order } from '../../enterprise/entities/order'
 import { InvalidAttachment } from '@/core/errors/errors/invalid-attachment'
 import { NotAllowed } from '@/core/errors/errors/not-allowed'
 import { Injectable } from '@nestjs/common'
+import { AttachmentsRepository } from '../repositories/attachments-repository'
 
 interface MarkOrderAsDeliveredUseCaseRequest {
   deliverymanId: string
   orderId: string
-  attachment: string
+  attachmentId: string
 }
 
 type MarkOrderAsDeliveredUseCaseResponse = Either<
@@ -19,12 +20,15 @@ type MarkOrderAsDeliveredUseCaseResponse = Either<
 
 @Injectable()
 export class MarkOrderAsDeliveredUseCase {
-  constructor(private ordersRepository: OrdersRepository) {}
+  constructor(
+    private ordersRepository: OrdersRepository,
+    private attachmentsRepository: AttachmentsRepository,
+  ) {}
 
   async execute({
     deliverymanId,
     orderId,
-    attachment,
+    attachmentId,
   }: MarkOrderAsDeliveredUseCaseRequest): Promise<MarkOrderAsDeliveredUseCaseResponse> {
     const order = await this.ordersRepository.findById(orderId)
 
@@ -36,13 +40,19 @@ export class MarkOrderAsDeliveredUseCase {
       return left(new NotAllowed())
     }
 
-    if (attachment === '' || attachment === null) {
+    if (attachmentId === '' || attachmentId === null) {
+      return left(new InvalidAttachment())
+    }
+
+    const attachment = await this.attachmentsRepository.findById(attachmentId)
+
+    if (!attachment) {
       return left(new InvalidAttachment())
     }
 
     order.title = 'Pedido entregue.'
     order.status = 'Pedido entregue com sucesso!'
-    order.attachment = attachment
+    order.attachment = attachment.id.toString()
 
     await this.ordersRepository.save(order)
 

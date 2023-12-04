@@ -8,6 +8,7 @@ import { DatabaseModule } from '@/infra/database/database.module'
 import { AdministratorFactory } from 'test/factories/make-administrator'
 import { JwtService } from '@nestjs/jwt'
 import { RecipientFactory } from 'test/factories/make-recipient'
+import { AttachmentFactory } from 'test/factories/make-attachment'
 
 describe('Mark order as delivered (E2E)', () => {
   let app: INestApplication
@@ -15,12 +16,18 @@ describe('Mark order as delivered (E2E)', () => {
   let orderFactory: OrderFactory
   let recipientFactory: RecipientFactory
   let administratorFactory: AdministratorFactory
+  let attachmentFactory: AttachmentFactory
   let jwt: JwtService
 
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
       imports: [AppModule, DatabaseModule],
-      providers: [OrderFactory, AdministratorFactory, RecipientFactory],
+      providers: [
+        OrderFactory,
+        AdministratorFactory,
+        RecipientFactory,
+        AttachmentFactory,
+      ],
     }).compile()
 
     app = moduleRef.createNestApplication()
@@ -30,15 +37,17 @@ describe('Mark order as delivered (E2E)', () => {
     orderFactory = moduleRef.get(OrderFactory)
     recipientFactory = moduleRef.get(RecipientFactory)
     administratorFactory = moduleRef.get(AdministratorFactory)
+    attachmentFactory = moduleRef.get(AttachmentFactory)
 
     await app.init()
   })
 
-  test.skip('[PUT] /orders/:orderId/:deliverymanId/delivered', async () => {
+  test('[PUT] /orders/:orderId/:deliverymanId/delivered', async () => {
     const user = await administratorFactory.makePrismaAdministrator()
     const accessToken = jwt.sign({ sub: user.id.toString() })
 
     const recipient = await recipientFactory.makePrismaRecipient()
+    const attachment = await attachmentFactory.makePrismaAttachment()
 
     const order = await orderFactory.makePrismaOrder({
       recipientId: recipient.id,
@@ -49,14 +58,13 @@ describe('Mark order as delivered (E2E)', () => {
 
     const orderId = order.id.toString()
     const deliverymanId = user.id.toString()
-
-    console.log(order)
+    const attachmentId = attachment.id.toString()
 
     const result = await request(app.getHttpServer())
       .put(`/orders/${orderId}/${deliverymanId}/delivered`)
       .set('Authorization', `Bearer ${accessToken}`)
       .send({
-        attachment: 'imagem.png',
+        attachmentId,
       })
 
     expect(result.statusCode).toBe(200)
@@ -72,7 +80,7 @@ describe('Mark order as delivered (E2E)', () => {
       expect.objectContaining({
         title: 'Pedido entregue.',
         status: 'Pedido entregue com sucesso!',
-        attachment: 'imagem.png',
+        attachmentId,
       }),
     )
   })

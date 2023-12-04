@@ -8,8 +8,11 @@ import { InMemoryDeliverymansRepository } from 'test/repositories/in-memory-deli
 import { MarkOrderAsDeliveredUseCase } from './mark-order-as-delivered'
 import { InvalidAttachment } from '@/core/errors/errors/invalid-attachment'
 import { NotAllowed } from '@/core/errors/errors/not-allowed'
+import { makeAttachment } from 'test/factories/make-attachment'
+import { InMemoryAttachmentsRepository } from 'test/repositories/in-memory-attachments-repository'
 
 let inMemoryDeliverymansRepository: InMemoryDeliverymansRepository
+let inMemoryAttachmentsRepository: InMemoryAttachmentsRepository
 
 let inMemoryRecipientsRepository: InMemoryRecipientsRepository
 let inMemoryOrdersRepository: InMemoryOrdersRepository
@@ -18,12 +21,16 @@ let sut: MarkOrderAsDeliveredUseCase
 describe('Update status to delivered', () => {
   beforeEach(() => {
     inMemoryDeliverymansRepository = new InMemoryDeliverymansRepository()
+    inMemoryAttachmentsRepository = new InMemoryAttachmentsRepository()
 
     inMemoryRecipientsRepository = new InMemoryRecipientsRepository()
     inMemoryOrdersRepository = new InMemoryOrdersRepository(
       inMemoryRecipientsRepository,
     )
-    sut = new MarkOrderAsDeliveredUseCase(inMemoryOrdersRepository)
+    sut = new MarkOrderAsDeliveredUseCase(
+      inMemoryOrdersRepository,
+      inMemoryAttachmentsRepository,
+    )
   })
 
   it('should be able to update status to delivered', async () => {
@@ -32,9 +39,11 @@ describe('Update status to delivered', () => {
       status: 'pedido feito',
       deliverymanId: deliveryman.id,
     })
+    const attachment = makeAttachment()
 
     inMemoryOrdersRepository.items.push(order)
     inMemoryDeliverymansRepository.items.push(deliveryman)
+    inMemoryAttachmentsRepository.items.push(attachment)
 
     const orderId = order.id.toString()
     const deliverymanId = deliveryman.id.toString()
@@ -42,14 +51,14 @@ describe('Update status to delivered', () => {
     const result = await sut.execute({
       deliverymanId,
       orderId,
-      attachment: 'image.png',
+      attachmentId: attachment.id.toString(),
     })
 
     expect(result.isRight()).toBe(true)
     expect(inMemoryOrdersRepository.items[0]).toMatchObject({
       title: 'Pedido entregue.',
       status: 'Pedido entregue com sucesso!',
-      attachment: 'image.png',
+      attachment: attachment.id.toString(),
     })
   })
 
@@ -63,6 +72,7 @@ describe('Update status to delivered', () => {
       },
       new UniqueEntityID('order-01'),
     )
+    const attachment = makeAttachment()
 
     inMemoryOrdersRepository.items.push(order)
     inMemoryDeliverymansRepository.items.push(deliveryman)
@@ -72,7 +82,7 @@ describe('Update status to delivered', () => {
     const result = await sut.execute({
       deliverymanId,
       orderId: 'invalid order ID',
-      attachment: 'image.png',
+      attachmentId: attachment.id.toString(),
     })
 
     expect(result.isLeft()).toBe(true)
@@ -85,6 +95,7 @@ describe('Update status to delivered', () => {
       status: 'pedido feito',
       deliverymanId: deliveryman.id,
     })
+    const attachment = makeAttachment()
 
     inMemoryOrdersRepository.items.push(order)
     inMemoryDeliverymansRepository.items.push(deliveryman)
@@ -94,7 +105,7 @@ describe('Update status to delivered', () => {
     const result = await sut.execute({
       deliverymanId: 'invalid deliveryman ID',
       orderId,
-      attachment: 'image.png',
+      attachmentId: attachment.id.toString(),
     })
 
     expect(result.isLeft()).toBe(true)
@@ -117,7 +128,7 @@ describe('Update status to delivered', () => {
     const result = await sut.execute({
       deliverymanId,
       orderId,
-      attachment: '',
+      attachmentId: '',
     })
 
     expect(result.isLeft()).toBe(true)
