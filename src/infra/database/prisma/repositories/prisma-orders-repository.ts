@@ -7,10 +7,14 @@ import { Recipient as PrismaRecipient } from '@prisma/client'
 import { Injectable } from '@nestjs/common'
 import { PaginationParams } from '@/core/repositories/pagination-params'
 import { DomainEvents } from '@/core/events/domain-events'
+import { CacheRepository } from '@/infra/cache/cache-repository'
 
 @Injectable()
 export class PrismaOrdersRepository implements OrdersRepository {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private cache: CacheRepository,
+  ) {}
 
   async create(order: Order): Promise<void> {
     const data = PrismaOrdersMapper.toPrisma(order)
@@ -21,6 +25,14 @@ export class PrismaOrdersRepository implements OrdersRepository {
   }
 
   async findById(id: string): Promise<Order | null> {
+    const cacheHit = await this.cache.get(`order:${id}:details`)
+
+    if (cacheHit) {
+      const cachedData = JSON.parse(cacheHit)
+
+      return cachedData
+    }
+
     const order = await this.prisma.order.findUnique({
       where: {
         id,
@@ -31,7 +43,11 @@ export class PrismaOrdersRepository implements OrdersRepository {
       return null
     }
 
-    return PrismaOrdersMapper.toDomain(order)
+    const orderDetails = PrismaOrdersMapper.toDomain(order)
+
+    await this.cache.set(`order:${id}:details`, JSON.stringify(orderDetails))
+
+    return orderDetails
   }
 
   async findManyByRecipientId(
@@ -109,6 +125,8 @@ export class PrismaOrdersRepository implements OrdersRepository {
       },
       data,
     })
+
+    await this.cache.delete(`order:${data.id}:details`)
 
     DomainEvents.dispatchEventsForAggregate(order.id)
   }
