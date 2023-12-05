@@ -20,6 +20,8 @@ import { FetchDeliveriesFromDeliverymanUseCase } from '@/domain/shippingCompany/
 import { UploadAttachmentController } from './controllers/upload-attachment.controller'
 import { StorageModule } from '../storage/storage.module'
 import { UploadAndCreateAttachmentUseCase } from '@/domain/shippingCompany/application/use-cases/upload-and-create-attachment'
+import { ReadNotificationUseCase } from '@/domain/notification/application/use-cases/read-notification'
+import { ReadNotificationController } from './controllers/read-notification.controller'
 
 @Module({
   imports: [DatabaseModule, CryptographyModule, StorageModule],
@@ -33,6 +35,7 @@ import { UploadAndCreateAttachmentUseCase } from '@/domain/shippingCompany/appli
     FetchDeliveriesFromRecipientController,
     FetchDeliveriesFromDeliverymanController,
     UploadAttachmentController,
+    ReadNotificationController,
   ],
   providers: [
     CreateAccountUseCase,
@@ -44,6 +47,7 @@ import { UploadAndCreateAttachmentUseCase } from '@/domain/shippingCompany/appli
     FetchDeliveriesFromRecipientUseCase,
     FetchDeliveriesFromDeliverymanUseCase,
     UploadAndCreateAttachmentUseCase,
+    ReadNotificationUseCase,
   ],
 })
 export class HttpModule {}

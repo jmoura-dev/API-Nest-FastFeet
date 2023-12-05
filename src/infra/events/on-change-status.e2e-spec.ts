@@ -9,6 +9,7 @@ import { AdministratorFactory } from 'test/factories/make-administrator'
 import { JwtService } from '@nestjs/jwt'
 import { RecipientFactory } from 'test/factories/make-recipient'
 import { waitFor } from 'test/utils/wait-for'
+import { DomainEvents } from '@/core/events/domain-events'
 
 describe('Send notification (E2E)', () => {
   let app: INestApplication
@@ -31,6 +32,8 @@ describe('Send notification (E2E)', () => {
     orderFactory = moduleRef.get(OrderFactory)
     recipientFactory = moduleRef.get(RecipientFactory)
     administratorFactory = moduleRef.get(AdministratorFactory)
+
+    DomainEvents.shouldRun = true
 
     await app.init()
   })
