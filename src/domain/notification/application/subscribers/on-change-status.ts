@@ -3,7 +3,9 @@ import { SendNotificationUseCase } from '../use-cases/send-notification'
 import { DomainEvents } from '@/core/events/domain-events'
 import { ChangeStatusEvent } from '@/domain/shippingCompany/enterprise/events/change-status-events'
 import { RecipientsRepository } from '@/domain/shippingCompany/application/repositories/recipients-repository'
+import { Injectable } from '@nestjs/common'
 
+@Injectable()
 export class OnChangeStatus implements EventHandler {
   constructor(
     private sendNotification: SendNotificationUseCase,
