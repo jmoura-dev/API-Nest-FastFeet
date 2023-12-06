@@ -39,7 +39,9 @@ describe('Send notification (E2E)', () => {
   })
 
   it('should send a notification when status changes', async () => {
-    const user = await administratorFactory.makePrismaAdministrator()
+    const user = await administratorFactory.makePrismaAdministrator({
+      role: 'ADMIN',
+    })
     const accessToken = jwt.sign({ sub: user.id.toString() })
 
     const recipient = await recipientFactory.makePrismaRecipient()

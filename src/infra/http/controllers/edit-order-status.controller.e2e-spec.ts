@@ -35,7 +35,10 @@ describe('Edit order status (E2E)', () => {
   })
 
   test('[PUT] /orders/:orderId', async () => {
-    const user = await administratorFactory.makePrismaAdministrator()
+    const user = await administratorFactory.makePrismaAdministrator({
+      role: 'ADMIN',
+      cpf: '123',
+    })
     const accessToken = jwt.sign({ sub: user.id.toString() })
 
     const recipient = await recipientFactory.makePrismaRecipient()

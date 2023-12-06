@@ -23,6 +23,7 @@ export class PrismaUsersMapper {
       cpf: administrator.cpf,
       password: administrator.password,
       name: administrator.name,
+      role: administrator.role,
     }
   }
 }

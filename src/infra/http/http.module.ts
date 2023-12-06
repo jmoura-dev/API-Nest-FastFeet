@@ -22,9 +22,11 @@ import { StorageModule } from '../storage/storage.module'
 import { UploadAndCreateAttachmentUseCase } from '@/domain/shippingCompany/application/use-cases/upload-and-create-attachment'
 import { ReadNotificationUseCase } from '@/domain/notification/application/use-cases/read-notification'
 import { ReadNotificationController } from './controllers/read-notification.controller'
+import { IsAdminMiddleware } from '../middlewares/verify-is-admin-middleware'
+import { AuthModule } from '../auth/auth.module'
 
 @Module({
-  imports: [DatabaseModule, CryptographyModule, StorageModule],
+  imports: [DatabaseModule, CryptographyModule, StorageModule, AuthModule],
   controllers: [
     CreateUsersController,
     AuthenticateController,
@@ -38,6 +40,7 @@ import { ReadNotificationController } from './controllers/read-notification.cont
     ReadNotificationController,
   ],
   providers: [
+    IsAdminMiddleware,
     CreateAccountUseCase,
     AuthenticateUseCase,
     EditOrderStatusUseCase,

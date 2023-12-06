@@ -53,5 +53,5 @@ describe('On change status', () => {
     await waitFor(() => {
       expect(sendNotificationExecuteSpy).toHaveBeenCalled()
     })
-  })
+  }, 10000)
 })

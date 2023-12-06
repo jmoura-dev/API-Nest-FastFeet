@@ -17,7 +17,7 @@ model User {
   name     String
   cpf      String  @unique
   password String
-  role     Role    @default(DELIVERYMAN)
+  role     Role?    @default(DELIVERYMAN)
   orders   Order[]
 
   @@map("users")
@@ -69,7 +69,7 @@ model Attachment {
 
 model Notification {
   id          String    @id @default(uuid())
-  recipientId String    @map("recipient_id")
+  recipientId String    @unique @map("recipient_id")
   title       String
   content     String
   readAt      DateTime? @map("read_at")
