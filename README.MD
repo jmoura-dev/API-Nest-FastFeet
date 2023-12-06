@@ -23,3 +23,35 @@
 - [x] Only the delivery person who picked up the order can mark it as delivered
 - [x] Only the admin can change a user's password
 - [x] It must not be possible for a delivery person to list the orders of another delivery person
+
+# Nest-Fast-Feet-API
+Infrastructure layer using the domain-based(DDD) NestJS Framework..
+
+### Techs:
+- **Nodejs**, **Nestjs**, **Docker**, **Clean-Architecture**, **DDD(Domain-driven-design)**, **Supertest**, **Typescript**, **Zod**, **JWT-authenticate**, **Tests(Unit tests and E2E)**, **Middlewares**, **POO**, **DomainEvents**;
+
+### Database:
+**PrismaORM**, **Postgres**
+
+## 📁 Project
+
+- Creating an API to track deliveries based on the above technologies and rules;
+
+## 💡 Functionalities
+
+- Is it possible to create a new order;
+- Is it possible changes status of order;
+- There are two personas (delivery person/admin);
+- Whenever the status changes, a notification is sent to the user;
+- To complete a delivery, the deliveryperson needs to send a image;
+- Integration with external service for uploading files(R2-Cloudflare);
+
+
+## 👨🏽‍💻 To use
+### Steps:
+#### Important - (Check the environment variables according to your settings and preferences.);
+
+- git clone https://github.com/jmoura-dev/API-Nest-FastFeet.git
+- cd api-nest-fast-feet
+- pnpm i
+- pnpm run dev
